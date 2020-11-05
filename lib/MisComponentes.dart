@@ -17,7 +17,7 @@ class FormularioState extends State<Formulario>{
 }
  */
 
-
+//-----------------------------------------------------------------------------------------------------------------------INICIO
 class Inicio extends StatefulWidget{
   @override
   InicioState createState(){
@@ -26,17 +26,25 @@ class Inicio extends StatefulWidget{
   }
 }
 class InicioState extends State<Inicio>{
-  String _server = 'http://google.com';
+  String _server = 'http://192.168.56.1:8008/hello/';
   var objJson;
+  String ms;
 
   InicioState(){
     print('Constructor InicioState');
     consultar().then((x){
-      print('Entrando en then() Respuesta = '+x);
+
+      print('Entrando en then()');
       setState((){
-        objJson=json.decode(x);
+        ms=x;
       });
+      print('Entro en decode');
+      objJson=jsonDecode(ms);
+      print("La TEMPERATURA AMBIENTE ES: "+objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString());
     });// la funcion asincrona usa then
+
+
+
   }
 
 
@@ -59,14 +67,15 @@ class InicioState extends State<Inicio>{
   @override
   Widget build (BuildContext context){
 
-    return ListView(
+    return Container(
         padding: const EdgeInsets.all(8),
-        children:[
+        child:
           //Text('Temperatura Ambiente:'+objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString()),
-          Text('hola'),
-        ]
+          Text("VENTANA DE INICIO "),
     );
 
 
   }
 }
+
+//-----------------------------------------------------------------------------------------------------------------------TEMPERATURA
