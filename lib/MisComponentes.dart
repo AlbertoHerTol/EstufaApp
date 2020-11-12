@@ -19,63 +19,61 @@ class FormularioState extends State<Formulario>{
 
 //-----------------------------------------------------------------------------------------------------------------------INICIO
 class Inicio extends StatefulWidget{
+  var json;
+  Inicio({Key key,var Json}):super(key:key){
+    print('Constructor Inicio clave: '+key.toString());
+    this.json=Json;
+  }
+
   @override
   InicioState createState(){
     print("CreateState de Inicio");
-    return new InicioState();
+    return new InicioState(this.json);
   }
 }
+
+
 class InicioState extends State<Inicio>{
-  String _server = 'http://192.168.56.1:8008/hello/';
+  //String _server = 'http://192.168.56.1:8008/hello/';
   var objJson;
   String ms;
+  String temperatura="0";
 
-  InicioState(){
+  void repaint(var js){
+    objJson=js;
+    print('Repintando Inicio');
+    print ("json-->"+objJson.toString());
+    print("la temperatura del json es:"+objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString());
+    print ("la variable temperatura es");
+    temperatura=objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString();
+  }
+
+  InicioState(var json){
     print('Constructor InicioState');
-    consultar().then((x){
-
-      print('Entrando en then()');
-      setState((){
-        ms=x;
-      });
-      print('Entro en decode');
-      objJson=jsonDecode(ms);
-      print("La TEMPERATURA AMBIENTE ES: "+objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString());
-    });// la funcion asincrona usa then
-
-
+    this.objJson = json;
 
   }
 
-
-  Future<String> consultar() async {
-    print("Lanza la consulta a  --> "+_server);
-    var respuesta = await http.get(_server); //await para que espere
-    // sample info available in response
-    int statusCode = respuesta.statusCode;
-    Map<String, String> headers = respuesta.headers;
-    String contentType = headers['content-type'];
-    String js = respuesta.body;
-    print(statusCode.toString()+"\n"+ headers.toString()+"\n"+ js.toString());
-    print(respuesta.toString());
-    print("Devuelvo la Respuesta: "+js);
-    return(js);
-  }
 
 
 
   @override
   Widget build (BuildContext context){
-
     return Container(
         padding: const EdgeInsets.all(8),
         child:
-          //Text('Temperatura Ambiente:'+objJson["estufa"]["estado"]["TemperaturaAmbiente"].toString()),
-          Text("VENTANA DE INICIO "),
+          Column(
+            children: [
+              Text("VENTANA DE INICIO"),
+              Text("La temperatura es: "+temperatura)
+              // https://pub.dev/packages/syncfusion_flutter_gauges/install
+              // https://pub.dev/packages/syncfusion_flutter_gauges
+            ],
+          ),
     );
 
 
   }
 }
 
-//-----------------------------------------------------------------------------------------------------------------------TEMPERATURA
+//-----------------------------------------------------------------------------------------------------------------------INICIO
